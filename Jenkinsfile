@@ -36,6 +36,18 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube Analysis') {
+    steps {
+        withSonarQubeEnv('sonarqube') {
+            sh '''
+                mvn clean verify sonar:sonar \
+                  -Dsonar.projectKey=student-app-jar \
+                  -Dsonar.projectName="Student App" \
+                  -Dsonar.projectVersion=${BUILD_NUMBER}
+            '''
+        }
+    }
+}
 
         stage('Package JAR') {
             steps {
